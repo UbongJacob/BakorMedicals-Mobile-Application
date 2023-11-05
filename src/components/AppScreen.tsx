@@ -6,11 +6,19 @@ import {
   ViewProps,
   ScrollView,
   ViewStyle,
+  Platform,
 } from "react-native";
 
 import Size from "../utilities/useResponsiveSize";
 import colors from "../configs/colors";
+import Constants from "expo-constants";
 
+export const GET_DEFAULT_PADDING = (): number => {
+  return (
+    (Platform.OS === "android" ? Constants.statusBarHeight : 0) +
+    Size.calcHeight(10)
+  );
+};
 interface ScreenProps extends ViewProps {
   containerStyle?: ViewStyle;
   scrollable?: boolean;
@@ -22,7 +30,7 @@ const AppScreen = (props: ScreenProps): JSX.Element => {
 
   return (
     <SafeAreaView style={[styles.screen, containerStyle]}>
-      <StatusBar backgroundColor={colors.BLUE100} barStyle={"light-content"} />
+      <StatusBar barStyle={"dark-content"} />
 
       {scrollable ? (
         <ScrollView
@@ -46,6 +54,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     paddingHorizontal: Size.calcWidth(24),
+    paddingTop: GET_DEFAULT_PADDING(),
   },
 });
 

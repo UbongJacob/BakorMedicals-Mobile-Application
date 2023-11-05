@@ -8,12 +8,14 @@ import LoginScreen from "../screens/patient/authentication/LoginScreen";
 import SignupScreen from "../screens/patient/authentication/SignupScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import DoctorLoginScreen from "../screens/doctor/auth/DoctorLoginScreen";
+import { PatientHomeNavigator } from "./PatientHomeNavigator";
 
 type AuthNavigatorParams = {
   [routes.LOGIN_SCREEN]: undefined;
   [routes.SIGNUP_SCREEN]: undefined;
   [routes.ONBOARDING_SCREEN]: undefined;
   [routes.DOCTOR_LOGIN_SCREEN]: undefined;
+  [routes.PATIENT_HOME_NAVIGATOR]: undefined;
 };
 
 export type AuthParamsNavigator =
@@ -34,6 +36,10 @@ const AuthNavigator = (): JSX.Element => {
         component={DoctorLoginScreen}
       />
       <Stack.Screen name={routes.SIGNUP_SCREEN} component={SignupScreen} />
+      <Stack.Screen
+        name={routes.PATIENT_HOME_NAVIGATOR}
+        component={PatientHomeNavigator}
+      />
     </Stack.Navigator>
   );
 };

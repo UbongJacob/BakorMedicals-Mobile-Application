@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 
 import AppScreen from "../../../components/AppScreen";
@@ -14,6 +14,7 @@ import { AppForm, AppFormField, SubmitButton } from "../../../components/forms";
 import AppText from "../../../components/AppText";
 import routes from "../../../navigation/routes";
 import AppPasswordToggle from "../../../components/AppPasswordToggle";
+import BakorLogo from "../../../assets/images/bakor-medicals-logo.png";
 
 const SigninSchema = Yup.object().shape({
   // email: Yup.string().email().required().trim().label('Email'),
@@ -54,15 +55,14 @@ const LoginScreen = (): JSX.Element => {
   //   }
   // };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    navigation.replace(routes.PATIENT_HOME_NAVIGATOR);
+  };
   return (
     <AppScreen scrollable>
+      <Image style={styles.image} source={BakorLogo} />
       <View style={styles.container}>
-        <View style={{ ...styles.center, ...styles.lineContainer }}>
-          <View style={styles.line} />
-          <AppText style={styles.lineText}>OR</AppText>
-          <View style={styles.line} />
-        </View>
+        <AppText style={styles.patientLogin}>Patient Login</AppText>
 
         <AppForm
           initialValues={initialValues}
@@ -108,7 +108,7 @@ const LoginScreen = (): JSX.Element => {
 
           <SubmitButton
             // isLoading={loginReq.isLoading}
-            isLoading={true}
+            isLoading={false}
             style={{ marginTop: Size.calcHeight(50) }}
             // isLoading={login.isLoading}
             title="Log In"
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Size.calcWidth(18),
     paddingVertical: Size.calcHeight(44),
-    marginVertical: Size.calcHeight(47),
+    marginBottom: Size.calcHeight(47),
     backgroundColor: colors.BLUE500,
     borderRadius: Size.calcAverage(20),
   },
@@ -163,6 +163,19 @@ const styles = StyleSheet.create({
     marginHorizontal: Size.calcWidth(18),
     fontFamily: fonts.OPENSANS_600,
     fontSize: Size.calcWidth(15),
+  },
+  patientLogin: {
+    fontSize: Size.calcWidth(35),
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: Size.calcHeight(40),
+  },
+  image: {
+    height: Size.calcHeight(80),
+    aspectRatio: 1,
+    alignSelf: "center",
+    marginTop: Size.calcHeight(5),
+    marginBottom: Size.calcHeight(20),
   },
 });
 
