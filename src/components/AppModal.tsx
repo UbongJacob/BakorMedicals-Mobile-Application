@@ -49,7 +49,7 @@ const AppModal = ({
             onPress={(e) => e.stopPropagation()}
           >
             <Pressable style={styles.modalContent}>
-              {children}
+              <View style={{ flex: 1 }}>{children}</View>
               <View style={styles.actionContainer}>
                 <TouchableOpacity
                   onPress={onClosePress}
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: Size.calcAverage(30),
     borderTopLeftRadius: Size.calcAverage(30),
     paddingHorizontal: Size.calcAverage(15),
-    paddingVertical: Size.calcHeight(20),
+    paddingTop: Size.calcHeight(20),
   },
   modalContainer: {
     flex: 1,
@@ -102,6 +102,8 @@ const styles = StyleSheet.create({
   actionContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    backgroundColor: colors.WHITE100,
+    paddingVertical: Size.calcHeight(10),
   },
   modalAcceptButton: {
     borderWidth: Size.calcAverage(1),
