@@ -9,6 +9,7 @@ import AppButton from "../../../components/AppButton";
 import AppModal from "../../../components/AppModal";
 import AppBackButton from "../../../components/AppBackButton";
 import BookingModal from "./BookingModal";
+import AvailableCard from "../../../components/AvailableCard";
 
 const DoctorDetailsScreen = (): JSX.Element => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -38,9 +39,7 @@ const DoctorDetailsScreen = (): JSX.Element => {
         <View style={styles.row}>
           <AppText>About doctor </AppText>
 
-          <View style={styles.availContainer}>
-            <AppText style={styles.availText}>Available Today</AppText>
-          </View>
+          <AvailableCard title="Available Today" isAvailable />
         </View>
 
         <AppText style={styles.name}>Ubong Jacob</AppText>
@@ -79,17 +78,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: Size.calcHeight(20),
     paddingTop: Size.calcHeight(10),
-  },
-  availContainer: {
-    paddingHorizontal: Size.calcWidth(10),
-    paddingVertical: Size.calcHeight(5),
-    borderRadius: Size.calcAverage(5),
-    borderWidth: Size.calcAverage(1.5),
-    borderColor: colors.BLUE300,
-    backgroundColor: colors.BLUE300,
-  },
-  availText: {
-    fontSize: Size.calcAverage(12),
   },
   container: {
     flex: 1,

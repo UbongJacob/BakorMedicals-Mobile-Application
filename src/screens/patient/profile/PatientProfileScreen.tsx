@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import * as Yup from "yup";
 
 import AppScreen from "../../../components/AppScreen";
@@ -8,6 +8,9 @@ import { AppForm, AppFormField, SubmitButton } from "../../../components/forms";
 import fonts from "../../../configs/fonts";
 import { emptyString } from "../../../assets/data/otherImportantData";
 import { useState } from "react";
+import AppText from "../../../components/AppText";
+import { useStore } from "zustand";
+import { usePatientPersistStore } from "../../../stores/patient.store";
 
 const SigninSchema = Yup.object().shape({
   // email: Yup.string().email().required().trim().label('Email'),
@@ -21,6 +24,11 @@ const initialValues = {
 
 const PatientProfileScreen = (): JSX.Element => {
   const [isEditable, setEditable] = useState(false);
+  const { clearUserDetails } = useStore(usePatientPersistStore);
+
+  const handleLogout = () => {
+    clearUserDetails();
+  };
 
   const handleSubmit = () => {};
   return (
@@ -67,6 +75,9 @@ const PatientProfileScreen = (): JSX.Element => {
           </AppForm>
         </View>
       </View>
+      <TouchableOpacity onPress={handleLogout} style={styles.modalCloseButton}>
+        <AppText style={styles.modalCloseText}>Logout</AppText>
+      </TouchableOpacity>
     </AppScreen>
   );
 };
@@ -132,6 +143,21 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     justifyContent: "center",
+  },
+
+  modalCloseButton: {
+    borderWidth: Size.calcAverage(1),
+    borderColor: colors.RED200,
+    borderRadius: Size.calcAverage(5),
+    paddingVertical: Size.calcHeight(10),
+    alignItems: "center",
+    alignSelf: "center",
+    width: "50%",
+  },
+  modalCloseText: {
+    fontWeight: "600",
+    fontSize: Size.calcAverage(16),
+    color: colors.RED200,
   },
 });
 

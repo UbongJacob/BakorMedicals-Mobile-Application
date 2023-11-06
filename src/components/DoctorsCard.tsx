@@ -19,7 +19,7 @@ const DoctorsCard = ({ name, occupation, isAvailable }: Props): JSX.Element => {
 
   const handlePress = () => {
     navigation.navigate(routes.DOCTOR_DETAILS_SCREEN, {
-      DOCTOR_DETAILS: { name: "" },
+      DOCTOR_DETAILS: { id: "" },
     });
   };
 

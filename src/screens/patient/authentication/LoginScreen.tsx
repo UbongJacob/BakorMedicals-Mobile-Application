@@ -9,16 +9,28 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthParamsNavigator } from "../../../navigation/AuthNavigator";
 import { useState } from "react";
 import { emptyString } from "../../../assets/data/otherImportantData";
-import { LoginRequest } from "../../../types/api/auth.type";
+import { LoginRequest } from "../../../types/api";
 import { AppForm, AppFormField, SubmitButton } from "../../../components/forms";
 import AppText from "../../../components/AppText";
 import routes from "../../../navigation/routes";
 import AppPasswordToggle from "../../../components/AppPasswordToggle";
 import BakorLogo from "../../../assets/images/bakor-medicals-logo.png";
+import { patientLogIn } from "../../../api/patient/auth.api";
+import { useMutation } from "@tanstack/react-query";
+import { FormikHelpers } from "formik";
+import {
+  formatResponseError,
+  formatResponseMessage,
+} from "../../../utilities/handleResponse";
+import appToastMessage from "../../../utilities/appToastMessage";
+import { AppTokenName } from "../../../configs/data";
+import { useStore } from "zustand";
+import { usePatientPersistStore } from "../../../stores/patient.store";
+import AppBackButton from "../../../components/AppBackButton";
 
 const SigninSchema = Yup.object().shape({
-  // email: Yup.string().email().required().trim().label('Email'),
-  // password: Yup.string().required().min(8).max(100).label('Password').trim(),
+  email: Yup.string().email().required().min(8).max(200).trim().label("Email"),
+  password: Yup.string().required().min(7).max(100).label("Password").trim(),
 });
 
 const initialValues: LoginRequest = {
@@ -29,37 +41,46 @@ const initialValues: LoginRequest = {
 const LoginScreen = (): JSX.Element => {
   const navigation = useNavigation<AuthParamsNavigator>();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  // const {setUserDetails} = useUserPersistStore();
+  const { setAuthToken, setUserDetails } = useStore(usePatientPersistStore);
 
-  // const loginReq = useMutation(logIn);
+  const loginReq = useMutation({ mutationFn: patientLogIn });
 
-  // const handleSubmit = async (
-  //   {email, password}: LoginRequest,
-  //   {resetForm}: FormikHelpers<LoginRequest>,
-  // ) => {
-  //   try {
-  //     const response = await loginReq.mutateAsync({email, password});
-  //     if (verifyResponse(response)) {
-  //       appToastMessage.success(
-  //         formatResponseMessage(response, 'Login Successful'),
-  //       );
+  const handleSubmit = async (
+    { email, password }: LoginRequest,
+    { resetForm }: FormikHelpers<LoginRequest>
+  ) => {
+    try {
+      const response = await loginReq.mutateAsync({
+        email: email.trim().toLowerCase(),
+        password: password.trim(),
+      });
 
-  //       setUserDetails(response.data);
-  //       resetForm();
-  //       navigation.replace(routes.ONBOARDING_NAVIGATOR);
-  //     } else {
-  //       appToastMessage.error(formatResponseError(response));
-  //     }
-  //   } catch (error) {
-  //     appToastMessage.info(formatError(error));
-  //   }
-  // };
+      if (response.ok) {
+        appToastMessage.success(
+          formatResponseMessage(response, "Login Successful")
+        );
+        setUserDetails(response.data);
+        // navigation.reset({
+        //   index: 1,
+        //   routes: [{ name: routes.PATIENT_HOME_NAVIGATOR }],
+        // });
+        if (!response.headers?.[AppTokenName])
+          return appToastMessage.error("Could not get auth token.");
+        else setAuthToken(response.headers[AppTokenName]);
 
-  const handleSubmit = () => {
-    navigation.replace(routes.PATIENT_HOME_NAVIGATOR);
+        resetForm();
+      } else {
+        appToastMessage.error(formatResponseError(response));
+      }
+    } catch (error) {
+      console.log({ error });
+      appToastMessage.info(JSON.stringify(error));
+    }
   };
+
   return (
     <AppScreen scrollable>
+      <AppBackButton />
       <Image style={styles.image} source={BakorLogo} />
       <View style={styles.container}>
         <AppText style={styles.patientLogin}>Patient Login</AppText>
@@ -107,8 +128,7 @@ const LoginScreen = (): JSX.Element => {
           </View>
 
           <SubmitButton
-            // isLoading={loginReq.isLoading}
-            isLoading={false}
+            isLoading={loginReq.status === "pending"}
             style={{ marginTop: Size.calcHeight(50) }}
             // isLoading={login.isLoading}
             title="Log In"

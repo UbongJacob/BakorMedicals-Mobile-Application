@@ -36,9 +36,10 @@ const AuthNavigator = (): JSX.Element => {
         component={DoctorLoginScreen}
       />
       <Stack.Screen name={routes.SIGNUP_SCREEN} component={SignupScreen} />
+
       <Stack.Screen
         name={routes.PATIENT_HOME_NAVIGATOR}
-        component={PatientHomeNavigator}
+      component={PatientHomeNavigator}
       />
     </Stack.Navigator>
   );

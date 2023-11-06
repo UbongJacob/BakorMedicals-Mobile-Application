@@ -23,7 +23,7 @@ const specializations: Props[] = [
     title: "Endocrinologist",
   },
   {
-    title: "General Practicioner",
+    title: "General Practitioner",
     subtitle: "GP",
   },
   {

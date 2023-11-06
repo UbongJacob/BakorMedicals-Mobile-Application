@@ -20,8 +20,6 @@ import fonts from "../configs/fonts";
 import Size from "../utilities/useResponsiveSize";
 import AppButton from "../components/AppButton";
 
-import { useUserPersistStore } from "../stores/user.store";
-
 import { AuthParamsNavigator } from "../navigation/AuthNavigator";
 import routes from "../navigation/routes";
 
@@ -56,7 +54,6 @@ const OnboardingScreen = (): JSX.Element => {
     inputRange: [0, Size.getWidth()],
     outputRange: [0, 30],
   });
-  const { setIsOnboarded } = useUserPersistStore();
 
   type DoneType = "Login" | "Doctor Login";
 
@@ -66,7 +63,6 @@ const OnboardingScreen = (): JSX.Element => {
     } else {
       navigation.push(routes.DOCTOR_LOGIN_SCREEN);
     }
-    setIsOnboarded(true);
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

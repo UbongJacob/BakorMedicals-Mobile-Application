@@ -35,7 +35,7 @@ import DoctorsListScreen from "../screens/patient/doctors/DoctorsListScreen";
 // HOME STACK NAVIGATOR
 
 interface DoctorDetails {
-  name: string;
+  id: string;
 }
 
 type HomeStackNavigatorParams = {
