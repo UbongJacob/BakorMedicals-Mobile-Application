@@ -29,20 +29,20 @@ const OnboardingScreen = (): JSX.Element => {
   const navigation = useNavigation<AuthParamsNavigator>();
 
   const data = [
+    // {
+    //   image: OnboardingImage1,
+    //   title: "Welcome to Your Outpatient Journey",
+    //   subtitle:
+    //     "Get started with our outpatient mobile app and discover the convenience of managing your healthcare on the go. We're here to guide you every step of the way.",
+    // },
+    // {
+    //   image: OnboardingImage2,
+    //   title: "Grow your popularity",
+    //   subtitle:
+    //     "Experience the future of outpatient care with our mobile app. Simplify appointment scheduling and stay connected with your healthcare providers.",
+    // },
     {
       image: OnboardingImage1,
-      title: "Welcome to Your Outpatient Journey",
-      subtitle:
-        "Get started with our outpatient mobile app and discover the convenience of managing your healthcare on the go. We're here to guide you every step of the way.",
-    },
-    {
-      image: OnboardingImage2,
-      title: "Grow your popularity",
-      subtitle:
-        "Experience the future of outpatient care with our mobile app. Simplify appointment scheduling and stay connected with your healthcare providers.",
-    },
-    {
-      image: OnboardingImage3,
       title: "Your Health, Your Way",
       subtitle:
         "Take control of your outpatient healthcare with our mobile and receive timely reminders effortlessly.",
@@ -124,7 +124,7 @@ const OnboardingScreen = (): JSX.Element => {
       </ScrollView>
 
       <View style={styles.actionContainer}>
-        <View style={styles.indicatorConatiner} pointerEvents="none">
+        {/* <View style={styles.indicatorConatiner} pointerEvents="none">
           <Animated.View
             style={[
               styles.indicator,
@@ -135,7 +135,7 @@ const OnboardingScreen = (): JSX.Element => {
           {[...data, 1].map((_, index) => (
             <Indicator key={index} />
           ))}
-        </View>
+        </View> */}
         <View style={styles.buttonContainer}>
           {currentIndex > 0 && currentIndex < data.length - 1 && (
             <AppButton

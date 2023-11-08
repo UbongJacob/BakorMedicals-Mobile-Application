@@ -6,6 +6,7 @@ import {
   ViewStyle,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { PropsWithChildren } from "react";
 
@@ -19,6 +20,7 @@ export interface AppModalProps extends PropsWithChildren {
   acceptText: string;
   onAcceptPress: () => void;
   onClosePress: () => void;
+  isLoading?: boolean;
 }
 
 const AppModal = ({
@@ -28,6 +30,7 @@ const AppModal = ({
   acceptText,
   onAcceptPress,
   onClosePress,
+  isLoading,
 }: AppModalProps): JSX.Element => {
   return (
     <Modal
@@ -52,6 +55,7 @@ const AppModal = ({
               <View style={{ flex: 1 }}>{children}</View>
               <View style={styles.actionContainer}>
                 <TouchableOpacity
+                  disabled={isLoading}
                   onPress={onClosePress}
                   style={styles.modalCloseButton}
                 >
@@ -59,10 +63,12 @@ const AppModal = ({
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                  disabled={isLoading}
                   onPress={onAcceptPress}
                   style={styles.modalAcceptButton}
                 >
                   <AppText style={styles.modalAcceptText}>{acceptText}</AppText>
+                  {isLoading && <ActivityIndicator color={colors.WHITE100} />}
                 </TouchableOpacity>
               </View>
             </Pressable>
@@ -114,6 +120,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "55%",
     backgroundColor: colors.BLUE100,
+    flexDirection: "row",
+    gap: Size.calcAverage(5),
   },
   modalAcceptText: {
     fontWeight: "600",

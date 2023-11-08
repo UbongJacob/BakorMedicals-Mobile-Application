@@ -15,21 +15,63 @@ import { useRoute } from "@react-navigation/native";
 import { IDoctor } from "../../../types/api/patient/doctor.type";
 import { useStore } from "zustand";
 import { usePatientPersistStore } from "../../../stores/patient.store";
+import appToastMessage from "../../../utilities/appToastMessage";
+import { useMutation } from "@tanstack/react-query";
+import { createBooking } from "../../../api/booking/booking.api";
+import { formatFinalBookingDateTime } from "../../../utilities/timeHelpers";
 
 const DoctorDetailsScreen = (): JSX.Element => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [doctorDetails, setDoctorDetails] = useState<IDoctor>();
 
-  const { allDoctorsResponse } = useStore(usePatientPersistStore);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<Date | null>(null);
+
+  const createBookingReq = useMutation({ mutationFn: createBooking });
+
+  const { allDoctorsResponse, patientDetails } = useStore(
+    usePatientPersistStore
+  );
 
   const params = useRoute<DoctorDetailsScreenProps>().params;
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
+  const closeModal = () => {
+    setModalVisible(false);
   };
 
-  const handleAccept = () => {
-    toggleModal();
+  const openModal = () => {
+    if (doctorDetails?.isAvailable) setModalVisible(true);
+    else appToastMessage.info("Sorry this doctor is not available.");
+  };
+
+  const handleAccept = async () => {
+    try {
+      if (!selectedDate) return appToastMessage.info("Please select a date");
+      if (!selectedTime) return appToastMessage.info("Please select a time");
+      if (!doctorDetails?.id || !patientDetails?.data.id) {
+        appToastMessage.error("Invalid Id");
+        closeModal();
+        return;
+      }
+
+      const response = await createBookingReq.mutateAsync({
+        doctorId: doctorDetails?.id,
+        patientId: patientDetails.data.id,
+        scheduledDateTime: formatFinalBookingDateTime({
+          date: selectedDate.toISOString(),
+          time: selectedTime.toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        appToastMessage.success("Session booking success.");
+        closeModal();
+      } else {
+        appToastMessage.error(response.data?.message ?? response.problem);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -75,17 +117,24 @@ const DoctorDetailsScreen = (): JSX.Element => {
         </ScrollView>
         <AppButton
           style={{ marginBottom: Size.calcHeight(40) }}
-          onPress={toggleModal}
+          onPress={openModal}
           title="Book appointment"
         />
 
         <AppModal
           acceptText="Book appointment"
           onAcceptPress={handleAccept}
-          onClosePress={() => toggleModal()}
+          onClosePress={() => closeModal()}
           isVisible={isModalVisible}
+          isLoading={createBookingReq.isPending}
         >
-          <BookingModal id={doctorDetails?.id ?? ""} />
+          <BookingModal
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            setSelectedTime={setSelectedTime}
+            setSelectedDate={setSelectedDate}
+            id={doctorDetails?.id ?? ""}
+          />
         </AppModal>
       </View>
     </View>

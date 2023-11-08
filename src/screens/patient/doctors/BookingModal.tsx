@@ -7,13 +7,23 @@ import {
   getWeekdaysInNext30Days,
   getWorkingHoursWithDifference,
 } from "../../../utilities/timeHelpers";
-import { useState } from "react";
+
 import colors from "../../../configs/colors";
 
-const BookingModal = ({ id }: { id: string }): JSX.Element => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedTime, setSelectedTime] = useState<Date | null>(null);
+interface Props {
+  id: string;
+  setSelectedDate: (value: Date | null) => void;
+  setSelectedTime: (value: Date | null) => void;
+  selectedDate: Date | null;
+  selectedTime: Date | null;
+}
 
+const BookingModal = ({
+  setSelectedDate,
+  setSelectedTime,
+  selectedDate,
+  selectedTime,
+}: Props): JSX.Element => {
   const handleSelection = (date: Date) => {
     if (date.getUTCDate() === selectedDate?.getUTCDate()) setSelectedDate(null);
     else setSelectedDate(date);

@@ -133,3 +133,23 @@ export function greetUser() {
     return "Good night!";
   }
 }
+
+interface DateTimeProps {
+  date: string;
+  time: string;
+}
+
+export const formatFinalBookingDateTime = ({ date, time }: DateTimeProps) => {
+  // Create Date objects from the two values
+  const date1 = new Date(time);
+  const date2 = new Date(date);
+  // Set the time of date1 to match the date part of date2
+  date1.setUTCFullYear(date2.getUTCFullYear());
+  date1.setUTCMonth(date2.getUTCMonth());
+  date1.setUTCDate(date2.getUTCDate());
+
+  // Add an extra hour to date1
+  date1.setUTCHours(date1.getUTCHours() + 1);
+
+  return date1.toISOString();
+};
