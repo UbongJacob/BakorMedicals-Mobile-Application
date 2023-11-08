@@ -6,7 +6,7 @@ interface Specialty {
   subtitle: string | null;
 }
 
-interface IDoctor {
+export interface IDoctor {
   id: string;
   email: string;
   phoneNumber: string;
@@ -24,4 +24,8 @@ interface IDoctor {
 
 export interface GetAllDoctorsResponse extends GenericApiResponse {
   data: IDoctor[];
+}
+
+export interface DoctorLoginResponse extends GenericApiResponse {
+  data: IDoctor;
 }

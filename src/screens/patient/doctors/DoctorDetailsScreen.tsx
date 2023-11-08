@@ -1,5 +1,5 @@
 import { View, StyleSheet, Image, ScrollView } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import AppText from "../../../components/AppText";
 import URLS from "../../../assets/data/URLS";
@@ -10,9 +10,20 @@ import AppModal from "../../../components/AppModal";
 import AppBackButton from "../../../components/AppBackButton";
 import BookingModal from "./BookingModal";
 import AvailableCard from "../../../components/AvailableCard";
+import { DoctorDetailsScreenProps } from "../../../navigation/StackNavigators";
+import { useRoute } from "@react-navigation/native";
+import { IDoctor } from "../../../types/api/patient/doctor.type";
+import { useStore } from "zustand";
+import { usePatientPersistStore } from "../../../stores/patient.store";
 
 const DoctorDetailsScreen = (): JSX.Element => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [doctorDetails, setDoctorDetails] = useState<IDoctor>();
+
+  const { allDoctorsResponse } = useStore(usePatientPersistStore);
+
+  const params = useRoute<DoctorDetailsScreenProps>().params;
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -21,10 +32,20 @@ const DoctorDetailsScreen = (): JSX.Element => {
     toggleModal();
   };
 
+  useEffect(() => {
+    const doctors = allDoctorsResponse?.data;
+
+    const doctor = doctors?.find(({ id }) => id === params.DOCTOR_DETAILS.id);
+    setDoctorDetails(doctor);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={{ position: "relative", height: "40%" }}>
-        <Image style={styles.image} source={{ uri: URLS.manAvatar }} />
+        <Image
+          style={styles.image}
+          source={{ uri: doctorDetails?.imageURL ?? URLS.manAvatar }}
+        />
         <View
           style={{
             position: "absolute",
@@ -39,17 +60,18 @@ const DoctorDetailsScreen = (): JSX.Element => {
         <View style={styles.row}>
           <AppText>About doctor </AppText>
 
-          <AvailableCard title="Available Today" isAvailable />
+          <AvailableCard
+            title="Available Today"
+            isAvailable={doctorDetails?.isAvailable ?? false}
+          />
         </View>
 
-        <AppText style={styles.name}>Ubong Jacob</AppText>
-        <AppText style={styles.title}>Medical Doctor</AppText>
+        <AppText style={styles.name}>
+          {doctorDetails?.firstName} {doctorDetails?.lastName}
+        </AppText>
+        <AppText style={styles.title}>{doctorDetails?.specialty.title}</AppText>
         <ScrollView>
-          <AppText style={styles.about}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat,
-            impedit! Consectetur explicabo animi sapiente quas eius corrupti
-            illo eveniet accusamus minima, officia et facere, tempora repellat
-          </AppText>
+          <AppText style={styles.about}>{doctorDetails?.description}</AppText>
         </ScrollView>
         <AppButton
           style={{ marginBottom: Size.calcHeight(40) }}
@@ -63,7 +85,7 @@ const DoctorDetailsScreen = (): JSX.Element => {
           onClosePress={() => toggleModal()}
           isVisible={isModalVisible}
         >
-          <BookingModal />
+          <BookingModal id={doctorDetails?.id ?? ""} />
         </AppModal>
       </View>
     </View>

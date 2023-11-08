@@ -4,7 +4,7 @@ import BookingNotFound from "./components/BookingNotFound";
 
 const PendingScreen = (): JSX.Element => {
   return (
-    <AppScreen isWhiteContent style={styles.container}>
+    <AppScreen style={styles.container}>
       <BookingNotFound
         title="No Upcoming Bookings."
         description="There have been no booked consultations yet."

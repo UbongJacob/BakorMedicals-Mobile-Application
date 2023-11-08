@@ -2,12 +2,17 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PatienceLoginResponse } from "../types/api/patient/auth.types";
-import { GetAllDoctorsResponse } from "../types/api/patient/doctor.type";
+import {
+  DoctorLoginResponse,
+  GetAllDoctorsResponse,
+} from "../types/api/patient/doctor.type";
 
 type PatientPersistStoreState = {
   patientDetails?: PatienceLoginResponse;
   authToken?: string;
+  doctorsToken?: string;
   allDoctorsResponse?: GetAllDoctorsResponse;
+  doctorsLoginResponse?: DoctorLoginResponse;
 };
 interface PatientPersistStore extends PatientPersistStoreState {
   setUserDetails: (userDetails?: PatienceLoginResponse) => void;
@@ -15,7 +20,10 @@ interface PatientPersistStore extends PatientPersistStoreState {
   setAuthToken: (value: string) => void;
   clearUserDetails: () => void;
   isLoggedIn: () => boolean;
+  isDoctorLoggedIn: () => boolean;
   setAllDoctorsResponse: (value: GetAllDoctorsResponse) => void;
+  setDoctorsLoginResponse: (value: DoctorLoginResponse) => void;
+  setDoctorsToken: (value: string) => void;
 }
 
 interface MKKVZustandState<T> {
@@ -39,6 +47,8 @@ export const usePatientPersistStore = create<
       patientDetails: undefined,
       authToken: undefined,
       allDoctorsResponse: undefined,
+      doctorsLoginResponse: undefined,
+      doctorsToken: undefined,
 
       //   ACTIONS OR MUTATORS
       deleteUserDetails: () => set({ patientDetails: undefined }),
@@ -47,14 +57,26 @@ export const usePatientPersistStore = create<
 
       setAuthToken: (authToken) => set({ authToken }),
 
+      setDoctorsLoginResponse: (doctorsLoginResponse) =>
+        set({ doctorsLoginResponse }),
+
+      setDoctorsToken: (doctorsToken) => set({ doctorsToken }),
+
       clearUserDetails: () =>
-        set({ authToken: undefined, setUserDetails: undefined }),
+        set({
+          authToken: undefined,
+          setUserDetails: undefined,
+          doctorsToken: undefined,
+          doctorsLoginResponse: undefined,
+        }),
 
       isLoggedIn: () => !!get().authToken,
+      isDoctorLoggedIn: () => !!get().doctorsToken,
 
       setAllDoctorsResponse: (allDoctorsResponse) =>
         set({ allDoctorsResponse }),
     }),
+
     {
       name: patientPersistStoreName,
       // storage: {

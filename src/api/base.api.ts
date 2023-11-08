@@ -1,12 +1,16 @@
 import { create } from "apisauce";
 
-const baseURL = "http://192.168.28.137:1209/api";
+const CURRENT_IP_ADDRESS = "192.168.59.137";
+// const CURRENT_IP_ADDRESS = "192.168.5.137";
+
+const baseURL = `http://${CURRENT_IP_ADDRESS}:1209/api`;
 
 export const client = create({
   baseURL,
 });
 
 // client.addAsyncRequestTransform(async (request) => {
+
 //   // console.log(
 //   //   "Request : addAsyncReqTransform",
 //   //   JSON.stringify(request, undefined, 3)

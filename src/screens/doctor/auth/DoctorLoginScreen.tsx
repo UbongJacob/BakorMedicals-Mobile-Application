@@ -1,21 +1,18 @@
-import { Image, Pressable, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 
 import AppScreen from "../../../components/AppScreen";
 import colors from "../../../configs/colors";
 import fonts from "../../../configs/fonts";
 import Size from "../../../utilities/useResponsiveSize";
-import { useNavigation } from "@react-navigation/native";
-import { AuthParamsNavigator } from "../../../navigation/AuthNavigator";
 import { useState } from "react";
 import { emptyString } from "../../../assets/data/otherImportantData";
 import { LoginRequest } from "../../../types/api";
 import { AppForm, AppFormField, SubmitButton } from "../../../components/forms";
 import AppText from "../../../components/AppText";
-import routes from "../../../navigation/routes";
 import AppPasswordToggle from "../../../components/AppPasswordToggle";
 import BakorLogo from "../../../assets/images/bakor-medicals-logo.png";
-import { patientLogIn } from "../../../api/patient/auth.api";
+import { doctorLogin } from "../../../api/patient/auth.api";
 import { useMutation } from "@tanstack/react-query";
 import { FormikHelpers } from "formik";
 import {
@@ -39,11 +36,12 @@ const initialValues: LoginRequest = {
 };
 
 const LoginScreen = (): JSX.Element => {
-  const navigation = useNavigation<AuthParamsNavigator>();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const { setAuthToken, setUserDetails } = useStore(usePatientPersistStore);
+  const { setDoctorsToken, setDoctorsLoginResponse } = useStore(
+    usePatientPersistStore
+  );
 
-  const loginReq = useMutation({ mutationFn: patientLogIn });
+  const loginReq = useMutation({ mutationFn: doctorLogin });
 
   const handleSubmit = async (
     { email, password }: LoginRequest,
@@ -55,18 +53,18 @@ const LoginScreen = (): JSX.Element => {
         password: password.trim(),
       });
 
-      if (response.ok) {
+      if (response.ok && response.data) {
         appToastMessage.success(
           formatResponseMessage(response, "Login Successful")
         );
-        setUserDetails(response.data);
+        setDoctorsLoginResponse(response.data);
         // navigation.reset({
         //   index: 1,
         //   routes: [{ name: routes.PATIENT_HOME_NAVIGATOR }],
         // });
         if (!response.headers?.[AppTokenName])
           return appToastMessage.error("Could not get auth token.");
-        else setAuthToken(response.headers[AppTokenName]);
+        else setDoctorsToken(response.headers[AppTokenName]);
 
         resetForm();
       } else {
@@ -111,13 +109,13 @@ const LoginScreen = (): JSX.Element => {
           />
 
           <View style={styles.actionContainer}>
-            <Pressable
-              onPress={() => navigation.navigate(routes.SIGNUP_SCREEN)}
+            {/* <Pressable
+              onPress={() => navigation.navigate(routes.DOCTOR_REGISTER_SCREEN)}
               hitSlop={Size.calcAverage(10)}
             >
               <AppText style={styles.actionText}>Dont have an account?</AppText>
               <AppText style={styles.actionTextBold}>Sign Up</AppText>
-            </Pressable>
+            </Pressable> */}
 
             {/* <Pressable
               onPress={() => navigation.navigate(routes.FORGOT_PASSWORD_SCREEN)}

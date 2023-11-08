@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
-import AppScreen from "../../../components/AppScreen";
 import BookingNotFound from "./components/BookingNotFound";
+import AppScreen from "../../../components/AppScreen";
 
-const PendingScreen = (): JSX.Element => {
+const CancelledScreen = (): JSX.Element => {
   return (
     <AppScreen isWhiteContent style={styles.container}>
       <BookingNotFound
-        title="No Upcoming Bookings."
-        description="There have been no booked consultations yet."
+        title="No Canceled Bookings."
+        description="There have been no canceled consultations yet."
       />
     </AppScreen>
   );
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   container: {},
 });
 
-export default PendingScreen;
+export default CancelledScreen;

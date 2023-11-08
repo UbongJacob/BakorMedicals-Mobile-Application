@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: colors.WHITE100,
     paddingVertical: Size.calcHeight(10),
+    paddingBottom: Size.calcHeight(40),
   },
   modalAcceptButton: {
     borderWidth: Size.calcAverage(1),

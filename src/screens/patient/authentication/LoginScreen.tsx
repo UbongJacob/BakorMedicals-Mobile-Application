@@ -74,7 +74,7 @@ const LoginScreen = (): JSX.Element => {
       }
     } catch (error) {
       console.log({ error });
-      appToastMessage.info(JSON.stringify(error));
+      appToastMessage.info(JSON.stringify(error, undefined, 3));
     }
   };
 

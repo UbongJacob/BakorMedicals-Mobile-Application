@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import colors from "../../../configs/colors";
 
-const BookingModal = (): JSX.Element => {
+const BookingModal = ({ id }: { id: string }): JSX.Element => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
 

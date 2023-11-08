@@ -18,4 +18,10 @@ export default Object.freeze({
 
   // DOCTOR ROUTES
   DOCTOR_LOGIN_SCREEN: "Doctor_Login",
+  DOCTOR_REGISTER_SCREEN: "Doctor_Register",
+  DOCTOR_PROFILE_SCREEN: "DoctorProfile",
+  DOCTOR_HOME_SCREEN: "DoctorHome",
+  DOCTOR_PENDING_BOOKING_SCREEN: "DoctorPendingBookingScreen",
+  DOCTOR_COMPLETED_BOOKING_SCREEN: "DoctorCompletedBookingScreen",
+  DOCTOR_CANCELLED_BOOKING_SCREEN: "DoctorCancelledBookingScreen",
 });

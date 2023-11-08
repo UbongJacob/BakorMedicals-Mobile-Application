@@ -15,7 +15,7 @@ import AppText from "../../../components/AppText";
 import routes from "../../../navigation/routes";
 import AppPasswordToggle from "../../../components/AppPasswordToggle";
 import BakorLogo from "../../../assets/images/bakor-medicals-logo.png";
-import { patientRegister } from "../../../api/patient/auth.api";
+import { doctorRegister } from "../../../api/patient/auth.api";
 import { useMutation } from "@tanstack/react-query";
 import { FormikHelpers } from "formik";
 import {
@@ -41,12 +41,14 @@ const initialValues: LoginRequest = {
   email: emptyString,
 };
 
-const SignupScreen = (): JSX.Element => {
+const DoctorRegisterScreen = (): JSX.Element => {
   const navigation = useNavigation<AuthParamsNavigator>();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const { setAuthToken, setUserDetails } = useStore(usePatientPersistStore);
+  const { setDoctorsToken, setDoctorsLoginResponse } = useStore(
+    usePatientPersistStore
+  );
 
-  const registerReq = useMutation({ mutationFn: patientRegister });
+  const registerReq = useMutation({ mutationFn: doctorRegister });
 
   const handleSubmit = async (
     { email, password, firstName, lastName, phoneNumber }: RegisterRequest,
@@ -61,20 +63,19 @@ const SignupScreen = (): JSX.Element => {
         lastName: lastName.trim(),
         phoneNumber: phoneNumber.trim(),
       });
-      console.log(response);
 
-      if (response.ok) {
+      if (response.ok && response.data) {
         appToastMessage.success(
-          formatResponseMessage(response, "Registration Successful")
+          formatResponseMessage(response, "Registeration Successful")
         );
-        setUserDetails(response.data);
+        setDoctorsLoginResponse(response.data);
         // navigation.reset({
         //   index: 1,
         //   routes: [{ name: routes.PATIENT_HOME_NAVIGATOR }],
         // });
         if (!response.headers?.[AppTokenName])
           return appToastMessage.error("Could not get auth token.");
-        else setAuthToken(response.headers[AppTokenName]);
+        else setDoctorsToken(response.headers[AppTokenName]);
 
         resetForm();
       } else {
@@ -92,7 +93,7 @@ const SignupScreen = (): JSX.Element => {
         <AppBackButton />
         <Image style={styles.image} source={BakorLogo} />
         <View style={styles.container}>
-          <AppText style={styles.patientLogin}>Patient Register</AppText>
+          <AppText style={styles.patientLogin}>Doctor Register</AppText>
 
           <AppForm
             initialValues={initialValues}
@@ -144,7 +145,7 @@ const SignupScreen = (): JSX.Element => {
 
             <View style={styles.actionContainer}>
               <Pressable
-                onPress={() => navigation.navigate(routes.LOGIN_SCREEN)}
+                onPress={() => navigation.navigate(routes.DOCTOR_LOGIN_SCREEN)}
                 hitSlop={Size.calcAverage(10)}
               >
                 <AppText style={styles.actionText}>
@@ -233,4 +234,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default DoctorRegisterScreen;

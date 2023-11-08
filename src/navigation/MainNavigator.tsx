@@ -5,15 +5,22 @@ import AuthNavigator from "./AuthNavigator";
 import { usePatientPersistStore } from "../stores/patient.store";
 import { useStore } from "zustand";
 import { PatientHomeNavigator } from "./PatientHomeNavigator";
+import DoctorHomeNavigator from "./DoctorHomeNavigator";
 
 const queryClient = new QueryClient();
 
 const MainNavigator = (): JSX.Element => {
-  const { isLoggedIn } = useStore(usePatientPersistStore);
+  const { isLoggedIn, isDoctorLoggedIn } = useStore(usePatientPersistStore);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isLoggedIn() ? <PatientHomeNavigator /> : <AuthNavigator />}
+      {isLoggedIn() ? (
+        <PatientHomeNavigator />
+      ) : isDoctorLoggedIn() ? (
+        <DoctorHomeNavigator />
+      ) : (
+        <AuthNavigator />
+      )}
       <Toast />
     </QueryClientProvider>
   );

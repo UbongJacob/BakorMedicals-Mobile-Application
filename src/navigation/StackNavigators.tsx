@@ -9,6 +9,7 @@ import DoctorDetailsScreen from "../screens/patient/doctors/DoctorDetailsScreen"
 import PatientHomeScreen from "../screens/patient/home/PatientHomeScreen";
 import NotificationsScreen from "../screens/patient/notifications/NotificationsScreen";
 import DoctorsListScreen from "../screens/patient/doctors/DoctorsListScreen";
+import { RouteProp } from "@react-navigation/native";
 //  DEFAULT EXAMPLE THAT CAN BE USED TO CREATE NEW STACK NAVIGATOR
 
 // NAME NAVIGATOR
@@ -49,6 +50,11 @@ type HomeStackNavigatorParams = {
 
 export type HomeStackParamsNavigator =
   NativeStackNavigationProp<HomeStackNavigatorParams>;
+
+export type DoctorDetailsScreenProps = RouteProp<
+  HomeStackNavigatorParams,
+  "DoctorDetailsScreen"
+>;
 
 const HomeStack = createNativeStackNavigator<HomeStackNavigatorParams>();
 

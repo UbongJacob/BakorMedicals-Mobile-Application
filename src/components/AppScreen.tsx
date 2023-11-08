@@ -22,6 +22,7 @@ export const GET_DEFAULT_PADDING = (): number => {
 interface ScreenProps extends ViewProps {
   containerStyle?: ViewStyle;
   scrollable?: boolean;
+  isWhiteContent?: boolean;
 }
 // statusbarColor = colors.WHITE100,
 //   statusbarStyle = 'dark-content',
@@ -30,7 +31,9 @@ const AppScreen = (props: ScreenProps): JSX.Element => {
 
   return (
     <SafeAreaView style={[styles.screen, containerStyle]}>
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar
+        barStyle={Platform.OS === "android" ? "light-content" : "dark-content"}
+      />
 
       {scrollable ? (
         <ScrollView

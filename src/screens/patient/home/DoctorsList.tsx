@@ -7,10 +7,14 @@ import { HomeStackParamsNavigator } from "../../../navigation/StackNavigators";
 import routes from "../../../navigation/routes";
 import colors from "../../../configs/colors";
 import AppButton2 from "../../../components/AppButton2";
+import { useStore } from "zustand";
+import { usePatientPersistStore } from "../../../stores/patient.store";
 
 const DoctorsList = (): JSX.Element => {
   const navigation = useNavigation<HomeStackParamsNavigator>();
 
+  const { allDoctorsResponse } = useStore(usePatientPersistStore);
+  const firstFiveItems = allDoctorsResponse?.data.slice(0, 5);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,12 +29,15 @@ const DoctorsList = (): JSX.Element => {
         </AppButton2>
       </View>
 
-      {[...Array(5)].map((_, index) => (
+      {firstFiveItems?.map((value, index) => (
         <View style={{ paddingVertical: Size.calcHeight(10) }} key={index}>
           <DoctorsCard
-            name="Dr. Charles"
+            firstName={value.firstName}
+            lastName={value.lastName}
+            id={value.id}
             occupation="General Practioner"
-            isAvailable={index % 2 == 1}
+            isAvailable={value.isAvailable}
+            imageURL={value.imageURL ?? undefined}
           />
         </View>
       ))}

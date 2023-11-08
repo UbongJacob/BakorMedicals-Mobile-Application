@@ -9,30 +9,45 @@ import { HomeStackParamsNavigator } from "../navigation/StackNavigators";
 import routes from "../navigation/routes";
 
 interface Props {
-  name: string;
+  firstName: string;
+  lastName: string;
   occupation: string;
   isAvailable: boolean;
+  imageURL?: string;
+  id: string;
 }
 
-const DoctorsCard = ({ name, occupation, isAvailable }: Props): JSX.Element => {
+const DoctorsCard = ({
+  firstName,
+  lastName,
+  occupation,
+  isAvailable,
+  imageURL,
+  id,
+}: Props): JSX.Element => {
   const navigation = useNavigation<HomeStackParamsNavigator>();
 
   const handlePress = () => {
     navigation.navigate(routes.DOCTOR_DETAILS_SCREEN, {
-      DOCTOR_DETAILS: { id: "" },
+      DOCTOR_DETAILS: { id },
     });
   };
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.doctorCard}>
-      <Image style={styles.image} source={{ uri: URLS.manAvatar }} />
+      <Image
+        style={styles.image}
+        source={{ uri: imageURL ?? URLS.manAvatar }}
+      />
       <View
         style={{
           justifyContent: "space-between",
           flex: 1,
         }}
       >
-        <AppText style={{ fontWeight: "bold" }}>{name}</AppText>
+        <AppText style={{ fontWeight: "bold" }}>
+          {firstName} {lastName}
+        </AppText>
         <AppText style={styles.occupation}>{occupation}</AppText>
 
         {isAvailable ? (

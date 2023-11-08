@@ -4,13 +4,12 @@ import CancelledScreen from "../screens/patient/bookings/CancelledScreen";
 import CompletedScreen from "../screens/patient/bookings/CompletedScreen";
 import routes from "./routes";
 import { SafeAreaView } from "react-native";
-import { GET_DEFAULT_PADDING } from "../components/AppScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
 export function PatientBookingNavigator() {
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: GET_DEFAULT_PADDING() }}>
+    <SafeAreaView style={[{ flex: 1 }]}>
       <Tab.Navigator>
         <Tab.Screen
           name={routes.PENDING_BOOKING_SCREEN}
